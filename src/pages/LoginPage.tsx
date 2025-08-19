@@ -24,17 +24,6 @@ export const LoginPage: React.FC = () => {
     });
   };
 
-  const handleDemoLogin = (userType: 'user' | 'admin') => {
-    // In a real app, you might pass additional parameters to Auth0
-    // to simulate different user types for demo purposes
-    loginWithRedirect({
-      appState: {
-        returnTo: '/dashboard',
-        userType // This could be used by your Auth0 rules/actions
-      }
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -87,40 +76,13 @@ export const LoginPage: React.FC = () => {
               )}
             </button>
 
-            {/* Demo Credentials Section */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Demo Accounts</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3">
-              <button
-                onClick={() => handleDemoLogin('user')}
-                disabled={isLoading}
-                className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                Demo User Account
-              </button>
-              
-              <button
-                onClick={() => handleDemoLogin('admin')}
-                disabled={isLoading}
-                className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <div className="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
-                Demo Admin Account
-              </button>
-            </div>
-
             {/* Info Text */}
             <div className="text-center">
               <p className="text-xs text-gray-500">
                 This demo uses Auth0 Universal Login for secure authentication
+              </p>
+              <p className="text-xs text-gray-400 mt-2">
+                You'll need to configure your Auth0 credentials in the .env file
               </p>
             </div>
           </div>

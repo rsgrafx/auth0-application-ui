@@ -39,7 +39,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   ].filter(item => item.show);
 
   if (!isAuthenticated) {
-    return <>{children}</>;
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {children}
+      </div>
+    );
   }
 
   return (
