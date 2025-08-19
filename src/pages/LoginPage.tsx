@@ -74,7 +74,7 @@ export const LoginPage: React.FC = () => {
             <h3 className="text-sm font-medium text-yellow-800 mb-2">Debug Info</h3>
             <div className="text-xs text-yellow-700 space-y-1">
               <div>Domain: {debugInfo.domain || 'NOT SET'}</div>
-              <div>Client ID: {debugInfo.clientId ? 'SET' : 'NOT SET'}</div>
+              <div>Client ID: {debugInfo.clientId || 'NOT SET'}</div>
               <div>Audience: {debugInfo.audience || 'NOT SET'}</div>
               <div>Redirect URI: {debugInfo.currentUrl}</div>
             </div>

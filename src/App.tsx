@@ -14,8 +14,8 @@ const auth0Config = {
   clientId: import.meta.env.VITE_AUTH0_CLIENT_ID || 'your-client-id',
   authorizationParams: {
     redirect_uri: window.location.origin,
-    audience: import.meta.env.VITE_AUTH0_AUDIENCE || 'https://your-api.example.com',
-    scope: 'openid profile email read:resources read:tenant admin:dashboard'
+    audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+    scope: 'openid profile email'
   },
   cacheLocation: 'localstorage' as const,
   useRefreshTokens: true
