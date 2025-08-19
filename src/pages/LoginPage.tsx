@@ -17,12 +17,23 @@ export const LoginPage: React.FC = () => {
   }
 
   const handleLogin = () => {
+    console.log('Login button clicked - redirecting to Auth0...');
     loginWithRedirect({
       appState: {
         returnTo: '/dashboard'
       }
     });
   };
+
+  // Debug information
+  const debugInfo = {
+    domain: import.meta.env.VITE_AUTH0_DOMAIN,
+    clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
+    audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+    currentUrl: window.location.origin
+  };
+
+  console.log('Auth0 Configuration:', debugInfo);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -57,6 +68,19 @@ export const LoginPage: React.FC = () => {
           </div>
         )}
 
+        {/* Debug Info (only in development) */}
+        {import.meta.env.DEV && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h3 className="text-sm font-medium text-yellow-800 mb-2">Debug Info</h3>
+            <div className="text-xs text-yellow-700 space-y-1">
+              <div>Domain: {debugInfo.domain || 'NOT SET'}</div>
+              <div>Client ID: {debugInfo.clientId ? 'SET' : 'NOT SET'}</div>
+              <div>Audience: {debugInfo.audience || 'NOT SET'}</div>
+              <div>Redirect URI: {debugInfo.currentUrl}</div>
+            </div>
+          </div>
+        )}
+
         {/* Login Form */}
         <div className="bg-white py-8 px-6 shadow-xl rounded-xl border border-gray-100">
           <div className="space-y-6">
@@ -82,7 +106,7 @@ export const LoginPage: React.FC = () => {
                 This demo uses Auth0 Universal Login for secure authentication
               </p>
               <p className="text-xs text-gray-400 mt-2">
-                You'll need to configure your Auth0 credentials in the .env file
+                Configure your Auth0 credentials in the .env file (copy from .env.example)
               </p>
             </div>
           </div>

@@ -39,7 +39,7 @@ export const ProtectedResourcePage: React.FC = () => {
       // Get access token for API calls
       const token = await getAccessTokenSilently({
         authorizationParams: {
-          audience: 'https://your-api.example.com', // Your API identifier
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE || 'https://your-api.example.com',
           scope: 'read:resources read:tenant'
         }
       });
