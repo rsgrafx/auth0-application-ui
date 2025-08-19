@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Navigate } from 'react-router-dom';
 import { Shield, Loader2, AlertCircle } from 'lucide-react';
+import { useApp } from '../contexts/AppContext';
 
 export const LoginPage: React.FC = () => {
   const { 
@@ -10,6 +11,7 @@ export const LoginPage: React.FC = () => {
     isLoading, 
     error 
   } = useAuth0();
+  const { applicationName } = useApp();
 
   // Redirect if already authenticated
   if (isAuthenticated) {
@@ -44,7 +46,7 @@ export const LoginPage: React.FC = () => {
             <Shield className="w-8 h-8 text-white" />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Welcome to Auth0 Demo
+            Welcome to {applicationName}
           </h2>
           <p className="mt-2 text-sm text-gray-600">
             Experience secure authentication and authorization

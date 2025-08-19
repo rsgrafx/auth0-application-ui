@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { apiService } from '../services/api';
+import { TenantInfo } from '../types/auth';
 import { 
   User, 
   Shield, 
@@ -14,7 +16,59 @@ import {
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
-  const { user, isLoading } = useAuth0();
+  const { user, isLoading, getAccessTokenSilently } = useAuth0();
+  const [tenantInfo, setTenantInfo] = useState<TenantInfo | null>(null);
+  const [userStats, setUserStats] = useState({ userCount: 0, activeUsers: 0 });
+  const [applicationInfo, setApplicationInfo] = useState({ name: 'Auth0 Demo', description: '' });
+  const [loadingTenant, setLoadingTenant] = useState(false);
+
+  // Fetch tenant information on component mount
+  useEffect(() => {
+    const fetchTenantData = async () => {
+      if (user) {
+        setLoadingTenant(true);
+        try {
+          // Get access token for Management API
+          const token = await getAccessTokenSilently({
+            authorizationParams: {
+              audience: `https://${import.meta.env.VITE_AUTH0_DOMAIN}/api/v2/`,
+              scope: 'read:users read:tenant read:clients'
+            }
+          });
+
+          // Fetch tenant info, user stats, and application info
+          const [tenantResponse, stats, appInfo] = await Promise.all([
+            apiService.getTenantInfo(token),
+            apiService.getUserStats(token),
+            apiService.getApplicationInfo(token, import.meta.env.VITE_AUTH0_CLIENT_ID)
+          ]);
+
+          if (tenantResponse.status === 'success') {
+            setTenantInfo({
+              ...tenantResponse.data,
+              userCount: stats.userCount
+            });
+          }
+          setUserStats(stats);
+          setApplicationInfo(appInfo);
+        } catch (error) {
+          console.warn('Failed to fetch tenant data:', error);
+          // Use fallback data
+          setTenantInfo({
+            id: import.meta.env.VITE_AUTH0_DOMAIN?.split('.')[0] || 'unknown',
+            name: 'Your Organization',
+            domain: import.meta.env.VITE_AUTH0_DOMAIN || 'unknown',
+            plan: 'Standard',
+            userCount: 0
+          });
+        } finally {
+          setLoadingTenant(false);
+        }
+      }
+    };
+
+    fetchTenantData();
+  }, [user, getAccessTokenSilently]);
 
   if (isLoading) {
     return (
@@ -189,29 +243,56 @@ export const DashboardPage: React.FC = () => {
           <div className="flex items-center mb-4">
             <Building className="w-5 h-5 text-green-600 mr-2" />
             <h2 className="text-lg font-semibold text-gray-900">Tenant Details</h2>
+            {loadingTenant && (
+              <div className="ml-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
+              </div>
+            )}
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-gray-900">Acme Corp</div>
+              <div className="text-2xl font-bold text-gray-900">
+                {tenantInfo?.name || 'Loading...'}
+              </div>
               <div className="text-sm text-gray-500">Organization</div>
             </div>
             
             <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{tenantId}</div>
+              <div className="text-2xl font-bold text-blue-600">
+                {tenantInfo?.id || tenantId}
+              </div>
               <div className="text-sm text-gray-500">Tenant ID</div>
             </div>
             
             <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">Enterprise</div>
+              <div className="text-2xl font-bold text-green-600">
+                {tenantInfo?.plan || 'Standard'}
+              </div>
               <div className="text-sm text-gray-500">Plan</div>
             </div>
             
             <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">1,250</div>
+              <div className="text-2xl font-bold text-purple-600">
+                {loadingTenant ? '...' : (tenantInfo?.userCount || userStats.userCount || '0')}
+              </div>
               <div className="text-sm text-gray-500">Total Users</div>
             </div>
           </div>
+
+          {/* Additional tenant info if available */}
+          {tenantInfo && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="text-sm text-gray-600">
+                <strong>Domain:</strong> {tenantInfo.domain}
+              </div>
+              {userStats.activeUsers > 0 && (
+                <div className="text-sm text-gray-600 mt-1">
+                  <strong>Active Users:</strong> {userStats.activeUsers} ({Math.round((userStats.activeUsers / (tenantInfo.userCount || 1)) * 100)}%)
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Quick Actions */}

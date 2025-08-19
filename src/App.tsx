@@ -7,6 +7,7 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ProtectedResourcePage } from './pages/ProtectedResourcePage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
+import { AppProvider } from './contexts/AppContext';
 
 // Auth0 configuration
 const auth0Config = {
@@ -14,8 +15,8 @@ const auth0Config = {
   clientId: import.meta.env.VITE_AUTH0_CLIENT_ID || 'your-client-id',
   authorizationParams: {
     redirect_uri: window.location.origin,
-    audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-    scope: 'openid profile email'
+    audience: import.meta.env.VITE_AUTH0_AUDIENCE || `https://${import.meta.env.VITE_AUTH0_DOMAIN}/api/v2/`,
+    scope: 'openid profile email read:users read:tenant read:clients'
   },
   cacheLocation: 'localstorage' as const,
   useRefreshTokens: true
@@ -24,39 +25,41 @@ const auth0Config = {
 function App() {
   return (
     <Auth0Provider {...auth0Config}>
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/protected" 
-              element={
-                <ProtectedRoute>
-                  <ProtectedResourcePage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/analytics" 
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <AnalyticsPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="/" element={<LoginPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Layout>
-      </Router>
+      <AppProvider>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/protected" 
+                element={
+                  <ProtectedRoute>
+                    <ProtectedResourcePage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/analytics" 
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AnalyticsPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route path="/" element={<LoginPage />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </AppProvider>
     </Auth0Provider>
   );
 }

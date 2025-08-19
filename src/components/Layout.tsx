@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useApp } from '../contexts/AppContext';
 import { 
   Home, 
   Shield, 
@@ -17,6 +18,7 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout, isAuthenticated } = useAuth0();
+  const { applicationName } = useApp();
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
@@ -58,7 +60,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <Shield className="w-5 h-5 text-white" />
                 </div>
                 <span className="ml-2 text-xl font-bold text-gray-900">
-                  Auth0 Demo
+                  {applicationName}
                 </span>
               </div>
               
