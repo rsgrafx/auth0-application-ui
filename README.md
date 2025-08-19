@@ -73,9 +73,9 @@ A comprehensive demonstration of Auth0 authentication and authorization workflow
 
 2. **Update `.env` with your Auth0 settings**:
    ```env
-   VITE_AUTH0_DOMAIN=your-domain.auth0.com
-   VITE_AUTH0_CLIENT_ID=your-client-id
-   VITE_AUTH0_AUDIENCE=https://your-api.example.com
+   REACT_APP_AUTH0_DOMAIN=your-domain.auth0.com
+   REACT_APP_AUTH0_CLIENT_ID=your-client-id
+   REACT_APP_AUTH0_AUDIENCE=https://your-api.example.com
    ```
 
 ### 3. Install and Run
@@ -186,9 +186,9 @@ npm run build
 
 ### Environment Variables for Production
 Update your production environment with:
-- `VITE_AUTH0_DOMAIN`
-- `VITE_AUTH0_CLIENT_ID`
-- `VITE_AUTH0_AUDIENCE`
+- `REACT_APP_AUTH0_DOMAIN`
+- `REACT_APP_AUTH0_CLIENT_ID`
+- `REACT_APP_AUTH0_AUDIENCE`
 
 ### Auth0 Production Settings
 Update your Auth0 application settings with production URLs:

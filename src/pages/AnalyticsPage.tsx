@@ -45,7 +45,7 @@ export const AnalyticsPage: React.FC = () => {
     try {
       const token = await getAccessTokenSilently({
         authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE || 'https://your-api.example.com',
+          audience: import.meta.env.REACT_APP_AUTH0_AUDIENCE || 'https://your-api.example.com',
           scope: 'read:analytics admin:dashboard'
         }
       });

@@ -10,11 +10,11 @@ import { AnalyticsPage } from './pages/AnalyticsPage';
 
 // Auth0 configuration
 const auth0Config = {
-  domain: import.meta.env.VITE_AUTH0_DOMAIN || 'your-domain.auth0.com',
-  clientId: import.meta.env.VITE_AUTH0_CLIENT_ID || 'your-client-id',
+  domain: import.meta.env.REACT_APP_AUTH0_DOMAIN || 'your-domain.auth0.com',
+  clientId: import.meta.env.REACT_APP_AUTH0_CLIENT_ID || 'your-client-id',
   authorizationParams: {
     redirect_uri: window.location.origin,
-    audience: import.meta.env.VITE_AUTH0_AUDIENCE || 'https://your-api.example.com',
+    audience: import.meta.env.REACT_APP_AUTH0_AUDIENCE || 'https://your-api.example.com',
     scope: 'openid profile email read:resources read:tenant admin:dashboard'
   },
   cacheLocation: 'localstorage' as const,

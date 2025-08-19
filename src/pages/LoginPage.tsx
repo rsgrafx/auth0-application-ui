@@ -27,9 +27,9 @@ export const LoginPage: React.FC = () => {
 
   // Debug information
   const debugInfo = {
-    domain: import.meta.env.VITE_AUTH0_DOMAIN,
-    clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
-    audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+    domain: import.meta.env.REACT_APP_AUTH0_DOMAIN,
+    clientId: import.meta.env.REACT_APP_AUTH0_CLIENT_ID,
+    audience: import.meta.env.REACT_APP_AUTH0_AUDIENCE,
     currentUrl: window.location.origin
   };
 
